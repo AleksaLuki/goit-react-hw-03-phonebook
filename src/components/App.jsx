@@ -10,21 +10,22 @@ export class App extends Component {
     filter: '',
   };
 
+
   componentDidMount() {
-    const contactsFromStorage = JSON.parse(localStorage.getItem('contacts'));
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
 
-    if (contactsFromStorage) {
-      this.setState({ contacts: contactsFromStorage });
-
-      if (contactsFromStorage.length === 0) {
-        toast.info('No contacts in your list yet');
-      }
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+  componentDidUpdate(prevState) {
+    const nextContacts = this.state.contacts;
+    const prevContacts = prevState.contacts;
+
+    if (nextContacts !== prevContacts) {
+      localStorage.setItem('contacts', JSON.stringify(nextContacts));
     }
   }
 
@@ -53,7 +54,7 @@ export class App extends Component {
   handleChangeFilter = e => {
     this.setState({ filter: e.target.value });
   };
-
+//  --------- 
   habdleFilterContacts = () => {
     return this.state.contacts.filter(contact =>
       contact.name
